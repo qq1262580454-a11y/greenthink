@@ -2,6 +2,15 @@
 
 > 世界上从不缺少好想法，只缺少让它们被看见的地方。
 
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.x-lightblue)](https://flask.palletsprojects.com/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen)](CONTRIBUTING.md)
+[![Stars](https://img.shields.io/github/stars/qq1262580454-a11y/greenthink?style=social)](https://github.com/qq1262580454-a11y/greenthink)
+[![Issues](https://img.shields.io/github/issues/qq1262580454-a11y/greenthink)](https://github.com/qq1262580454-a11y/greenthink/issues)
+
+> 📜 我们的信念与承诺，见 [《开源宣言》](OPEN-SOURCE-MANIFESTO.md)
+
 Greenthink 是一个**创意成果展示平台**：我们不展示创作过程，只呈现最终创意结果。
 任何人都可以提交自己用 AI 做出的完整创意成果——一个作品、一套方案、一个工具——
 让创意被看见、被记住。

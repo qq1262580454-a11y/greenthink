@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 创意成果提交与交流
+    url: https://github.com/qq1262580454-a11y/greenthink/discussions
+    about: 提交你的创意成果、讨论想法、提问交流请走 Discussions
+  - name: 📜 开源宣言
+    url: https://github.com/qq1262580454-a11y/greenthink/blob/master/OPEN-SOURCE-MANIFESTO.md
+    about: 了解 Greenthink 的信念与承诺
