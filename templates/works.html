@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-{% block title %}展厅 · Greenthink{% endblock %}
+{% block title %}{{ T.works_title }} · Greenthink{% endblock %}
 {% block content %}
 
 <!-- ═══ 成果展厅 ═══ -->
 <section class="works page">
-  <h2 class="sec-title">成果展厅</h2>
-  <p class="sec-sub">共 {{ total }} 个成果 · 我们不展示创作过程，只呈现最终创意结果</p>
+  <h2 class="sec-title">{{ T.works_title }}</h2>
+  <p class="sec-sub">{{ T.works_sub.format(n=total) }}</p>
 
   <div class="tagbar">
-    {% for t in tags %}
-      <a class="tag {{ 'active' if t == cur else '' }}" href="/works?tag={{ t }}">{{ t }}</a>
+    {% for v, zh, en in tags %}
+      <a class="tag {{ 'active' if v == cur else '' }}" href="/works?tag={{ v }}">{{ en if lang == 'en' else zh }}</a>
     {% endfor %}
   </div>
 
@@ -31,7 +31,7 @@
     {% endfor %}
   </div>
   {% else %}
-  <div class="card empty">该分类下暂无成果，<a href="/submit">来提交第一个</a></div>
+  <div class="card empty"><a href="/submit">{{ T.works_empty }}</a></div>
   {% endif %}
 </section>
 

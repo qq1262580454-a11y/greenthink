@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}管理 · Greenthink{% endblock %}
+{% block title %}{{ T.admin_title }} · Greenthink{% endblock %}
 {% block content %}
 
 <section class="submit page">
-  <h2 class="sec-title">成果管理</h2>
+  <h2 class="sec-title">{{ T.admin_title }}</h2>
 
   <div class="card">
-    <h3 class="card-title">⏳ 待审核（{{ pending|length }}）</h3>
+    <h3 class="card-title">{{ T.admin_pending }}（{{ pending|length }}）</h3>
     {% if pending %}
       {% for r in pending %}
       <div class="pend-item">
@@ -16,24 +16,24 @@
           <p class="summary">{{ r.summary }}</p>
         </div>
         <div class="pend-ops">
-          <a class="btn btn-outline sm" href="/work/{{ r.id }}" target="_blank">预览</a>
+          <a class="btn btn-outline sm" href="/work/{{ r.id }}" target="_blank">{{ T.admin_preview }}</a>
           <form method="post" action="/admin/approve/{{ r.id }}" style="display:inline">
-            <button class="btn btn-ok sm" type="submit">✓ 通过</button>
+            <button class="btn btn-ok sm" type="submit">✓ {{ T.admin_approve }}</button>
           </form>
           <form method="post" action="/admin/delete/{{ r.id }}" style="display:inline"
-                onsubmit="return confirm('确定删除这条成果？')">
-            <button class="btn btn-danger sm" type="submit">删除</button>
+                onsubmit="return confirm('Delete?')">
+            <button class="btn btn-danger sm" type="submit">{{ T.admin_delete }}</button>
           </form>
         </div>
       </div>
       {% endfor %}
     {% else %}
-      <div class="hint">暂无待审核成果。</div>
+      <div class="hint">—</div>
     {% endif %}
   </div>
 
   <div class="card">
-    <h3 class="card-title">🟢 已上线（{{ online|length }}）</h3>
+    <h3 class="card-title">{{ T.admin_online }}（{{ online|length }}）</h3>
     {% if online %}
       {% for r in online %}
       <div class="pend-item">
@@ -42,16 +42,16 @@
           <span class="hint">{{ r.author }} · 👁 {{ r.views }} · {{ r.created }}</span>
         </div>
         <div class="pend-ops">
-          <a class="btn btn-outline sm" href="/work/{{ r.id }}" target="_blank">查看</a>
+          <a class="btn btn-outline sm" href="/work/{{ r.id }}" target="_blank">{{ T.admin_preview }}</a>
           <form method="post" action="/admin/delete/{{ r.id }}" style="display:inline"
-                onsubmit="return confirm('确定删除这条成果？')">
-            <button class="btn btn-danger sm" type="submit">删除</button>
+                onsubmit="return confirm('Delete?')">
+            <button class="btn btn-danger sm" type="submit">{{ T.admin_delete }}</button>
           </form>
         </div>
       </div>
       {% endfor %}
     {% else %}
-      <div class="hint">还没有上线成果。</div>
+      <div class="hint">—</div>
     {% endif %}
   </div>
 </section>

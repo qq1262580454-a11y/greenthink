@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="{{ lang }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% block title %}Greenthink · 你的创意，应该被看见{% endblock %}</title>
-<meta name="description" content="让每一个藏在脑海里的创意，终于有地方落地、被看见、被记住。">
+<title>{% block title %}Greenthink · {{ T.hero_h1 }}{% endblock %}</title>
+<meta name="description" content="{{ T.footer_h2a }}{{ T.footer_h2b }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -20,12 +20,13 @@
   </a>
   <div class="nav-right">
     <div class="nav-links">
-      <a href="/works" class="{{ 'active' if active == 'works' else '' }}">展厅</a>
-      <a href="/submit" class="{{ 'active' if active == 'submit' else '' }}">提交作品</a>
-      <a href="#">创作者</a>
-      <a href="#">关于我们</a>
+      <a href="/works" class="{{ 'active' if active == 'works' else '' }}">{{ T.nav_works }}</a>
+      <a href="/submit" class="{{ 'active' if active == 'submit' else '' }}">{{ T.nav_submit }}</a>
+      <a href="#">{{ T.nav_creators }}</a>
+      <a href="#">{{ T.nav_about }}</a>
     </div>
-    <a class="btn-nav" href="/submit">提交创意</a>
+    <a class="btn-nav" href="/submit">{{ T.nav_cta }}</a>
+    <a class="lang-switch" href="/lang/{{ 'zh' if lang == 'en' else 'en' }}">{{ T.lang }}</a>
   </div>
 </nav>
 
@@ -35,8 +36,8 @@
 
 <!-- ═══ 页脚 ═══ -->
 <footer class="footer">
-  <h2>让每一个藏在脑海里的创意，<br>终于有地方落地、被看见、被记住。</h2>
-  <p class="foot-tagline">工具交给AI迭代，想象力由人类定义。</p>
+  <h2>{{ T.footer_h2a }}<br>{{ T.footer_h2b }}</h2>
+  <p class="foot-tagline">{{ T.footer_tag }}</p>
   <p class="foot-note">© 2026 Greenthink</p>
 </footer>
 

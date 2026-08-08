@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}页面不存在 · Greenthink{% endblock %}
+{% block title %}{{ T.n404_title }} · Greenthink{% endblock %}
 {% block content %}
 <section class="submit page">
   <div class="card empty" style="text-align:center;padding:56px 20px">
-    <h2 class="sec-title" style="margin-bottom:14px">404</h2>
-    <p class="sec-sub">这个页面不存在，回展厅看看吧。</p>
+    <h2 class="sec-title" style="margin-bottom:14px">{{ T.n404_title }}</h2>
+    <p class="sec-sub">{{ T.n404_sub }}</p>
     <div class="d-actions" style="justify-content:center">
-      <a class="btn btn-dark" href="/">回首页</a>
+      <a class="btn btn-dark" href="/">{{ T.n404_btn }}</a>
     </div>
   </div>
 </section>

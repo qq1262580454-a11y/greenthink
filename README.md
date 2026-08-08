@@ -2,6 +2,8 @@
 
 > 世界上从不缺少好想法，只缺少让它们被看见的地方。
 
+> 🌐 [English](README.en.md) | 中文
+
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen)](CONTRIBUTING.md)
 [![Stars](https://img.shields.io/github/stars/qq1262580454-a11y/greenthink?style=social)](https://github.com/qq1262580454-a11y/greenthink)
