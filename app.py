@@ -148,7 +148,10 @@ def save_results(results):
     with LOCK:
         tmp = DATA_FILE + ".tmp"
         with open(tmp, "w", encoding="utf-8") as f:
-            json.dump({"results": results}, f, ensure_ascii=False, indent=2)
+            json.dump({"results": [
+                {k: v for k, v in r.items() if k != "has_img"}  # 剥离临时计算字段
+                for r in results
+            ]}, f, ensure_ascii=False, indent=2)
         os.replace(tmp, DATA_FILE)
 
 
@@ -265,7 +268,6 @@ def work(rid):
     if not r:
         abort(404)
     r["views"] = r.get("views", 0) + 1
-    r.pop("has_img", None)  # 临时计算字段，不持久化
     save_results(results)
     return render_template("work.html", r=r, active="", **ctx())
 
