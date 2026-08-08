@@ -5,9 +5,21 @@
 <section class="detail page">
   <div class="crumb"><a href="/works">{{ T.work_back }}</a></div>
 
-  {% if r.has_img %}
+  {% if r.images %}
+  <div class="d-gallery">
+    {% for img in r.images %}
+    <div class="d-gallery-item"><img src="{{ img }}" alt="{{ r.title }}"></div>
+    {% endfor %}
+  </div>
+  {% elif r.has_img %}
   <div class="d-hero">
     <img src="{{ url_for('static', filename='img/works/' ~ r.id ~ '.jpg') }}" alt="{{ r.title }}">
+  </div>
+  {% endif %}
+
+  {% if r.video %}
+  <div class="d-video">
+    <video src="{{ r.video }}" controls preload="metadata"></video>
   </div>
   {% endif %}
 

@@ -1,24 +1,40 @@
 # -*- coding: utf-8 -*-
 """Greenthink —— 你的创意，应该被看见
 Flask + JSON 存储：官网首页 / 成果展厅 / 作品详情 / 提交 / 管理（审核）
-中英双语（i18n）· 端口 5010
+中英双语（i18n）· 管理员登录保护 · 图片/视频上传 · 端口 5010
 """
 import json
 import os
+import re
 import threading
+import uuid
 from datetime import date
 
-from flask import Flask, abort, redirect, render_template, request, session, url_for
+from flask import (Flask, abort, redirect, render_template, request, session,
+                   url_for)
+from werkzeug.utils import secure_filename
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE = os.path.join(BASE_DIR, "data", "results.json")
 IMG_DIR = os.path.join(BASE_DIR, "static", "img", "works")
+UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
 IMG_EXTS = (".jpg", ".jpeg", ".png", ".webp")
 LOCK = threading.Lock()
+
+# ═══ 管理员密码（请修改成你自己的）═══
+ADMIN_PASSWORD = "greenthink2026"
 
 app = Flask(__name__)
 app.secret_key = "greenthink-creative-showcase"
 app.json.sort_keys = False
+app.config["MAX_CONTENT_LENGTH"] = 60 * 1024 * 1024  # 上传上限 60MB
+
+# 上传白名单
+ALLOWED_IMAGES = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
+ALLOWED_VIDEOS = {".mp4", ".webm", ".mov"}
+ALLOWED_ALL = ALLOWED_IMAGES | ALLOWED_VIDEOS
+
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # ═══════════ 界面文案（中/英） ═══════════
 UI = {
@@ -45,10 +61,15 @@ UI = {
         "form_tag": "分类", "form_summary": "一句话简介", "form_problem": "它解决了什么问题",
         "form_solution": "创意是怎么落地的", "form_result": "最终结果",
         "form_effects": "效果数据（每行一条）", "form_link": "体验链接（选填）",
+        "form_images": "作品图片（可多张，第一张作封面，支持 jpg/png/webp/gif）",
+        "form_video": "作品视频（选填，支持 mp4/webm/mov，60MB 内）",
         "submit_btn": "提交成果", "browse_btn": "先逛逛展厅",
         "submit_ok": "✅ 提交成功", "submit_ok_sub": "你的创意成果已进入审核队列，通过后会展示在展厅里。",
         "admin_title": "成果管理", "admin_pending": "⏳ 待审核", "admin_online": "🟢 已上线",
         "admin_preview": "预览", "admin_approve": "通过", "admin_delete": "删除",
+        "admin_login": "管理员登录", "admin_pass": "密码", "admin_login_btn": "登录",
+        "admin_logout": "退出登录", "admin_wrong": "密码错误，请重试",
+        "admin_denied": "请先登录管理员账号",
         "n404_title": "404", "n404_sub": "这个页面不存在，回展厅看看吧。", "n404_btn": "回首页",
         "lang": "EN",
     },
@@ -75,10 +96,15 @@ UI = {
         "form_tag": "Category", "form_summary": "One-line Summary", "form_problem": "What problem does it solve",
         "form_solution": "How the idea came to life", "form_result": "The final result",
         "form_effects": "Impact metrics (one per line)", "form_link": "Experience link (optional)",
+        "form_images": "Work images (multiple OK, first is cover; jpg/png/webp/gif)",
+        "form_video": "Work video (optional; mp4/webm/mov, up to 60MB)",
         "submit_btn": "Submit Work", "browse_btn": "Browse Gallery",
         "submit_ok": "✅ Submitted", "submit_ok_sub": "Your creation is in the review queue and will appear in the gallery once approved.",
         "admin_title": "Manage Creations", "admin_pending": "⏳ Pending Review", "admin_online": "🟢 Live",
         "admin_preview": "Preview", "admin_approve": "Approve", "admin_delete": "Delete",
+        "admin_login": "Admin Login", "admin_pass": "Password", "admin_login_btn": "Log in",
+        "admin_logout": "Log out", "admin_wrong": "Wrong password, try again",
+        "admin_denied": "Please log in as admin first",
         "n404_title": "404", "n404_sub": "This page does not exist. Head back to the gallery.", "n404_btn": "Back to Home",
         "lang": "中文",
     },
@@ -96,6 +122,8 @@ TAGS = [
 ]
 TAG_VALUES = [t[0] for t in TAGS]
 
+
+# ═══════════ 工具函数 ═══════════
 
 def load_results():
     with open(DATA_FILE, "r", encoding="utf-8") as f:
@@ -119,13 +147,36 @@ def online_list(results):
 
 
 def attach_img(results):
-    """成果 id 对应 static/img/works/<id>.jpg(.png/.webp)，存在则标记 has_img"""
+    """成果 id 对应 static/img/works/<id>.jpg 存在则标记 has_img（兼容旧的 id 配图）"""
     for r in results:
         r["has_img"] = any(
             os.path.exists(os.path.join(IMG_DIR, f"{r['id']}{ext}"))
             for ext in IMG_EXTS
         )
+        r.setdefault("images", [])
+        r.setdefault("video", "")
     return results
+
+
+def cover_of(r):
+    """卡片封面优先级：上传图第一张 > id 配图 > 渐变占位"""
+    if r.get("images"):
+        return r["images"][0]
+    if r.get("has_img"):
+        return url_for("static", filename=f"img/works/{r['id']}.jpg")
+    return ""
+
+
+def save_upload(file_storage):
+    """保存上传文件，返回 /static/uploads/xxx 相对路径；非法返回 None"""
+    if not file_storage or not file_storage.filename:
+        return None
+    ext = os.path.splitext(file_storage.filename)[1].lower()
+    if ext not in ALLOWED_ALL:
+        return None
+    name = f"{uuid.uuid4().hex}{ext}"
+    file_storage.save(os.path.join(UPLOAD_DIR, name))
+    return f"/static/uploads/{name}"
 
 
 def lang_of():
@@ -133,12 +184,30 @@ def lang_of():
 
 
 def ctx(**kw):
-    """每个页面通用的语言上下文"""
     lang = lang_of()
     kw["lang"] = lang
     kw["T"] = UI[lang]
+    kw["is_admin"] = is_admin()
     return kw
 
+
+def is_admin():
+    return session.get("admin") is True
+
+
+def admin_required(view):
+    from functools import wraps
+
+    @wraps(view)
+    def wrapper(*a, **kw):
+        if not is_admin():
+            return redirect(url_for("admin_login", next=request.path))
+        return view(*a, **kw)
+
+    return wrapper
+
+
+# ═══════════ 语言切换 ═══════════
 
 @app.route("/lang/<code>")
 def set_lang(code):
@@ -146,6 +215,8 @@ def set_lang(code):
         session["lang"] = code
     return redirect(request.referrer or url_for("home"))
 
+
+# ═══════════ 公开页面 ═══════════
 
 @app.route("/")
 def home():
@@ -191,8 +262,23 @@ def submit():
         author = (f.get("author") or "").strip()
         summary = (f.get("summary") or "").strip()
         if not title or not author:
-            return render_template("submit.html", tags=TAGS, err="成果名称和创作者必填 / Title and creator are required",
+            return render_template("submit.html", tags=TAGS,
+                                   err="成果名称和创作者必填 / Title and creator are required",
                                    active="submit", **ctx())
+
+        # 保存上传的图片与视频
+        images = []
+        for img in request.files.getlist("images"):
+            path = save_upload(img)
+            if path and path.lower().endswith(tuple(ALLOWED_IMAGES)):
+                images.append(path)
+        video = ""
+        vf = request.files.get("video")
+        if vf and vf.filename:
+            vpath = save_upload(vf)
+            if vpath and vpath.lower().endswith(tuple(ALLOWED_VIDEOS)):
+                video = vpath
+
         results = load_results()
         results.append({
             "id": next_id(results),
@@ -206,6 +292,8 @@ def submit():
             "result": (f.get("result") or "").strip(),
             "effects": [x.strip() for x in (f.get("effects") or "").splitlines() if x.strip()],
             "link": (f.get("link") or "").strip(),
+            "images": images,
+            "video": video,
             "status": "pending",
             "views": 0,
             "created": date.today().isoformat(),
@@ -220,7 +308,27 @@ def submit_done():
     return render_template("submit_done.html", active="", **ctx())
 
 
+# ═══════════ 管理后台（登录保护） ═══════════
+
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        if (request.form.get("password") or "") == ADMIN_PASSWORD:
+            session["admin"] = True
+            nxt = request.args.get("next")
+            return redirect(nxt if nxt and nxt.startswith("/") else url_for("admin"))
+        return render_template("admin_login.html", err=UI[lang_of()]["admin_wrong"], **ctx())
+    return render_template("admin_login.html", err="", **ctx())
+
+
+@app.route("/admin/logout")
+def admin_logout():
+    session.pop("admin", None)
+    return redirect(url_for("home"))
+
+
 @app.route("/admin")
+@admin_required
 def admin():
     results = load_results()
     pending = [r for r in results if r["status"] == "pending"]
@@ -229,6 +337,7 @@ def admin():
 
 
 @app.route("/admin/approve/<int:rid>", methods=["POST"])
+@admin_required
 def approve(rid):
     results = load_results()
     for r in results:
@@ -240,10 +349,23 @@ def approve(rid):
 
 
 @app.route("/admin/delete/<int:rid>", methods=["POST"])
+@admin_required
 def delete(rid):
     results = load_results()
+    target = next((r for r in results if r["id"] == rid), None)
     results = [r for r in results if r["id"] != rid]
     save_results(results)
+    if target:
+        for img in target.get("images", []):
+            try:
+                os.remove(os.path.join(BASE_DIR, img.lstrip("/")))
+            except OSError:
+                pass
+        if target.get("video"):
+            try:
+                os.remove(os.path.join(BASE_DIR, target["video"].lstrip("/")))
+            except OSError:
+                pass
     return redirect(url_for("admin"))
 
 
@@ -254,4 +376,5 @@ def not_found(e):
 
 if __name__ == "__main__":
     print("Greenthink 启动: http://127.0.0.1:5010")
+    print(f"管理员登录: http://127.0.0.1:5010/admin/login （密码: {ADMIN_PASSWORD}，请在 app.py 顶部修改）")
     app.run(host="0.0.0.0", port=5010, debug=False)

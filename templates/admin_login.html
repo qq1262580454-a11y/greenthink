@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ T.admin_login }} · Greenthink{% endblock %}
+{% block content %}
+<section class="submit page">
+  <div class="card login-card">
+    <h2 class="sec-title" style="margin-bottom:24px">{{ T.admin_login }}</h2>
+    {% if err %}<div class="err">{{ err }}</div>{% endif %}
+    <form method="post" class="login-form">
+      <label>{{ T.admin_pass }}
+        <input type="password" name="password" required autofocus placeholder="••••••••">
+      </label>
+      <div class="d-actions">
+        <button class="btn btn-dark" type="submit">{{ T.admin_login_btn }}</button>
+        <a class="btn btn-outline" href="/">{{ T.n404_btn }}</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

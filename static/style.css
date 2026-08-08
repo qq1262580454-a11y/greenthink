@@ -229,6 +229,27 @@ a.card { text-decoration: none; color: inherit; }
   display: block; width: 100%; max-height: 62vh;
   object-fit: cover;
 }
+/* 上传多图画廊 */
+.d-gallery {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px; margin-bottom: 40px;
+}
+.d-gallery-item {
+  border-radius: 14px; overflow: hidden;
+  box-shadow: var(--shadow); background: var(--card);
+}
+.d-gallery-item img {
+  display: block; width: 100%; max-height: 60vh; object-fit: cover;
+}
+/* 上传视频 */
+.d-video {
+  border-radius: 14px; overflow: hidden;
+  box-shadow: var(--shadow); margin-bottom: 40px;
+  background: #000;
+}
+.d-video video {
+  display: block; width: 100%; max-height: 62vh;
+}
 .d-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
 .d-badge {
   display: inline-block; padding: 4px 14px; border-radius: 980px;
@@ -274,6 +295,11 @@ a.card { text-decoration: none; color: inherit; }
   max-width: 760px; margin: 0 auto;
   display: flex; flex-direction: column; gap: 16px;
 }
+input[type=file] {
+  border: 1px solid rgba(26, 26, 28, 0.14); border-radius: 12px;
+  padding: 10px 14px; font-size: 13.5px; background: var(--card);
+  color: var(--ink-dim); cursor: pointer;
+}
 .form label {
   display: flex; flex-direction: column; gap: 7px;
   font-size: 13.5px; font-weight: 600; color: var(--ink);
@@ -309,6 +335,14 @@ textarea { resize: vertical; line-height: 1.7; }
   background: #ffebeb; color: #c92a2a; border: 1px solid #ffd4d4;
   border-radius: 12px; padding: 11px 16px; margin: 0 auto 18px;
   font-size: 13.5px; max-width: 760px; text-align: center;
+}
+
+/* ─────────── 登录页 ─────────── */
+.login-card { max-width: 420px; margin: 0 auto; padding: 40px 44px; }
+.login-form { display: flex; flex-direction: column; gap: 16px; }
+.login-form label {
+  display: flex; flex-direction: column; gap: 7px;
+  font-size: 13.5px; font-weight: 600; color: var(--ink);
 }
 
 /* ─────────── 页脚 ─────────── */

@@ -22,8 +22,12 @@
     <div class="nav-links">
       <a href="/works" class="{{ 'active' if active == 'works' else '' }}">{{ T.nav_works }}</a>
       <a href="/submit" class="{{ 'active' if active == 'submit' else '' }}">{{ T.nav_submit }}</a>
-      <a href="#">{{ T.nav_creators }}</a>
-      <a href="#">{{ T.nav_about }}</a>
+      {% if is_admin %}
+      <a href="/admin">{{ T.admin_title }}</a>
+      <a href="/admin/logout">{{ T.admin_logout }}</a>
+      {% else %}
+      <a href="/admin">{{ T.admin_title }}</a>
+      {% endif %}
     </div>
     <a class="btn-nav" href="/submit">{{ T.nav_cta }}</a>
     <a class="lang-switch" href="/lang/{{ 'zh' if lang == 'en' else 'en' }}">{{ T.lang }}</a>

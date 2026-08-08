@@ -8,7 +8,7 @@
 
   {% if err %}<div class="err">{{ err }}</div>{% endif %}
 
-  <form method="post" class="form">
+  <form method="post" class="form" enctype="multipart/form-data">
     <label>{{ T.form_title }} <span class="req">*</span>
       <input type="text" name="title" required placeholder="山海方言录 / A Dialect Bestiary" maxlength="60">
     </label>
@@ -40,6 +40,12 @@
     </label>
     <label>{{ T.form_link }}
       <input type="text" name="link" placeholder="http://...">
+    </label>
+    <label>{{ T.form_images }}
+      <input type="file" name="images" accept=".jpg,.jpeg,.png,.webp,.gif" multiple>
+    </label>
+    <label>{{ T.form_video }}
+      <input type="file" name="video" accept=".mp4,.webm,.mov">
     </label>
     <div class="d-actions">
       <button class="btn btn-dark" type="submit">{{ T.submit_btn }}</button>
