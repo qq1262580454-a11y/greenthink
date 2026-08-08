@@ -4,49 +4,42 @@
 
 <section class="submit page">
   <h2 class="sec-title">{{ T.submit_title }}</h2>
-  <p class="sec-sub">{{ T.submit_sub | safe }}</p>
+  <p class="sec-sub">{{ T.submit_sub }}</p>
 
   {% if err %}<div class="err">{{ err }}</div>{% endif %}
 
   <form method="post" class="form" enctype="multipart/form-data">
     <label>{{ T.form_title }} <span class="req">*</span>
-      <input type="text" name="title" required placeholder="山海方言录 / A Dialect Bestiary" maxlength="60">
+      <input type="text" name="title" required placeholder="{{ T.ph_title }}" maxlength="60">
+    </label>
+    <label>{{ T.form_summary }} <span class="req">*</span>
+      <input type="text" name="summary" required placeholder="{{ T.ph_summary }}" maxlength="120">
     </label>
     <label>{{ T.form_author }} <span class="req">*</span>
-      <input type="text" name="author" required placeholder="Your name" maxlength="20">
+      <input type="text" name="author" required placeholder="{{ T.ph_author }}" maxlength="20">
     </label>
-    <label>{{ T.form_industry }}
-      <input type="text" name="industry" placeholder="Digital Art / Design / Ops">
+
+    <label>{{ T.form_images }}
+      <input type="file" name="images" accept=".jpg,.jpeg,.png,.webp,.gif" multiple>
+    </label>
+
+    <label>{{ T.form_story }} <span class="opt">{{ T.form_optional }}</span>
+      <textarea name="story" rows="4" placeholder="{{ T.ph_story }}"></textarea>
+      <span class="hint">{{ T.form_story_hint }}</span>
+    </label>
+
+    <label>{{ T.form_video }} <span class="opt">{{ T.form_optional }}</span>
+      <input type="file" name="video" accept=".mp4,.webm,.mov">
+    </label>
+    <label>{{ T.form_link }} <span class="opt">{{ T.form_optional }}</span>
+      <input type="text" name="link" placeholder="http://...">
     </label>
     <label>{{ T.form_tag }}
       <select name="tag">
         {% for v, zh, en in tags %}{% if v != "全部" %}<option value="{{ v }}">{{ en if lang == 'en' else zh }}</option>{% endif %}{% endfor %}
       </select>
     </label>
-    <label>{{ T.form_summary }} <span class="req">*</span>
-      <input type="text" name="summary" required placeholder="One sentence about your work" maxlength="120">
-    </label>
-    <label>{{ T.form_problem }}
-      <textarea name="problem" rows="3" placeholder="What was missing? What was the pain?"></textarea>
-    </label>
-    <label>{{ T.form_solution }}
-      <textarea name="solution" rows="3" placeholder="What did you make with AI? How?"></textarea>
-    </label>
-    <label>{{ T.form_result }}
-      <textarea name="result" rows="3" placeholder="What is the final work? Who uses it?"></textarea>
-    </label>
-    <label>{{ T.form_effects }}
-      <textarea name="effects" rows="3" placeholder="12 dialects visualized&#10;Complete exhibition-ready series"></textarea>
-    </label>
-    <label>{{ T.form_link }}
-      <input type="text" name="link" placeholder="http://...">
-    </label>
-    <label>{{ T.form_images }}
-      <input type="file" name="images" accept=".jpg,.jpeg,.png,.webp,.gif" multiple>
-    </label>
-    <label>{{ T.form_video }}
-      <input type="file" name="video" accept=".mp4,.webm,.mov">
-    </label>
+
     <div class="d-actions">
       <button class="btn btn-dark" type="submit">{{ T.submit_btn }}</button>
       <a class="btn btn-outline" href="/works">{{ T.browse_btn }}</a>

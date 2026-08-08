@@ -17,11 +17,12 @@
       ],
       "link": "",
       "status": "online",
-      "views": 339,
+      "views": 340,
       "created": "2026-08-01",
       "has_img": false,
       "images": [],
-      "video": ""
+      "video": "",
+      "story": ""
     },
     {
       "id": 2,
@@ -44,7 +45,8 @@
       "created": "2026-08-03",
       "has_img": false,
       "images": [],
-      "video": ""
+      "video": "",
+      "story": ""
     },
     {
       "id": 3,
@@ -67,7 +69,8 @@
       "created": "2026-08-05",
       "has_img": false,
       "images": [],
-      "video": ""
+      "video": "",
+      "story": ""
     },
     {
       "id": 4,
@@ -90,7 +93,8 @@
       "created": "2026-08-06",
       "has_img": false,
       "images": [],
-      "video": ""
+      "video": "",
+      "story": ""
     },
     {
       "id": 5,
@@ -113,7 +117,8 @@
       "created": "2026-08-07",
       "has_img": false,
       "images": [],
-      "video": ""
+      "video": "",
+      "story": ""
     }
   ]
 }

@@ -47,7 +47,12 @@
     {% endfor %}
   </div>
 
-  {% if r.problem %}
+  {% if r.story %}
+  <div class="sec">
+    <h3>{{ T.work_story }}</h3>
+    <p style="white-space:pre-line">{{ r.story }}</p>
+  </div>
+  {% elif r.problem %}
   <div class="sec">
     <h3>{{ T.work_problem }}</h3>
     <p>{{ r.problem }}</p>
