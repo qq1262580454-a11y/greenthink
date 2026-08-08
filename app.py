@@ -204,8 +204,43 @@ def save_upload(file_storage):
     if ext not in ALLOWED_ALL:
         return None
     name = f"{uuid.uuid4().hex}{ext}"
-    file_storage.save(os.path.join(UPLOAD_DIR, name))
+    path = os.path.join(UPLOAD_DIR, name)
+    file_storage.save(path)
+    if not sniff_ok(path, ext):
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+        return None
     return f"/static/uploads/{name}"
+
+
+def sniff_ok(path, ext):
+    """校验文件内容与扩展名是否名副其实（防假文件）"""
+    try:
+        with open(path, "rb") as f:
+            head = f.read(12)
+    except OSError:
+        return False
+    if ext == ".pdf":
+        return head.startswith(b"%PDF-")
+    if ext in (".jpg", ".jpeg"):
+        return head.startswith(b"\xff\xd8\xff")
+    if ext == ".png":
+        return head.startswith(b"\x89PNG")
+    if ext == ".webp":
+        return head[:4] == b"RIFF" and head[8:12] == b"WEBP"
+    if ext == ".gif":
+        return head.startswith(b"GIF8")
+    if ext in (".mp4", ".mov"):
+        return head[4:8] == b"ftyp"
+    if ext == ".webm":
+        return head.startswith(b"\x1aE\xdf\xa3")
+    if ext == ".docx":
+        return head.startswith(b"PK\x03\x04")
+    if ext == ".doc":
+        return head.startswith(b"\xd0\xcf\x11\xe0")
+    return True
 
 
 def lang_of():
@@ -315,6 +350,11 @@ def submit():
             if dpath and dpath.lower().endswith(tuple(ALLOWED_DOCS)):
                 doc = dpath
                 doc_name = df.filename[:60]
+            else:
+                return render_template(
+                    "submit.html", tags=TAGS,
+                    err="文档不是有效的 PDF/Word 文件（可能是网页另存为的假文件），请上传真正的文件",
+                    active="submit", **ctx())
 
         results = load_results()
         results.append({
