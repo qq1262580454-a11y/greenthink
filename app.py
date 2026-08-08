@@ -21,8 +21,10 @@ UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
 IMG_EXTS = (".jpg", ".jpeg", ".png", ".webp")
 LOCK = threading.Lock()
 
-# ═══ 管理员密码（请修改成你自己的）═══
-ADMIN_PASSWORD = "greenthink2026"
+# ═══ 管理员密码：从环境变量读取，未设置时用默认值（仅本地开发用）═══
+# Windows 设置（新开终端生效）：
+#   setx GREENTHINK_ADMIN_PASSWORD "你的强密码"
+ADMIN_PASSWORD = os.environ.get("GREENTHINK_ADMIN_PASSWORD") or "greenthink2026"
 
 app = Flask(__name__)
 app.secret_key = "greenthink-creative-showcase"
