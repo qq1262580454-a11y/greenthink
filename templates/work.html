@@ -20,6 +20,10 @@
   {% if r.video %}
   <div class="d-video">
     <video src="{{ r.video }}" controls preload="metadata"></video>
+    <div class="d-video-bar">
+      <span class="hint">{{ T.video_hint }}</span>
+      <a class="v-dl" href="{{ r.video }}" download>{{ T.video_download }}</a>
+    </div>
   </div>
   {% endif %}
 

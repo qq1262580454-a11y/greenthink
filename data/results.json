@@ -114,6 +114,27 @@
       "images": [],
       "video": "",
       "story": ""
+    },
+    {
+      "id": 6,
+      "title": "1111111",
+      "author": "3333333",
+      "industry": "Other",
+      "tag": "设计创意",
+      "summary": "2222222",
+      "story": "",
+      "problem": "",
+      "solution": "",
+      "result": "",
+      "effects": [],
+      "link": "",
+      "images": [
+        "/static/uploads/a6f7440b58944835919269e72c89b318.png"
+      ],
+      "video": "/static/uploads/c74ada40bc6f42fb82986b6d85ca45ca.mp4",
+      "status": "online",
+      "views": 5,
+      "created": "2026-08-08"
     }
   ]
 }
