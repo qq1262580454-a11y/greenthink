@@ -3,12 +3,15 @@
 Flask + JSON 存储：官网首页 / 成果展厅 / 作品详情 / 提交 / 管理（审核）
 中英双语（i18n）· 管理员登录保护 · 图片/视频上传 · 端口 5010
 """
+import html as html_lib
 import json
 import os
 import re
 import threading
 import uuid
+import zipfile
 from datetime import date
+from xml.etree import ElementTree as ET
 
 from flask import (Flask, abort, redirect, render_template, request, session,
                    url_for)
@@ -243,6 +246,38 @@ def sniff_ok(path, ext):
     return True
 
 
+W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+
+
+def docx_to_html(path):
+    """用标准库把 docx 解析为简单 HTML（段落+表格），失败返回 None"""
+    try:
+        with zipfile.ZipFile(path) as z:
+            xml = z.read("word/document.xml").decode("utf-8")
+        root = ET.fromstring(xml)
+        body = root.find(W + "body")
+        if body is None:
+            return None
+        out = []
+        for child in body:
+            if child.tag == W + "p":
+                text = "".join(t.text or "" for t in child.iter(W + "t"))
+                text = text.replace("\t", "　")
+                out.append(f"<p>{html_lib.escape(text) or '&nbsp;'}</p>")
+            elif child.tag == W + "tbl":
+                rows = []
+                for tr in child.findall(W + "tr"):
+                    cells = []
+                    for tc in tr.findall(W + "tc"):
+                        ctext = "".join(t.text or "" for t in tc.iter(W + "t")).strip()
+                        cells.append(f"<td>{html_lib.escape(ctext)}</td>")
+                    rows.append("<tr>" + "".join(cells) + "</tr>")
+                out.append("<table>" + "".join(rows) + "</table>")
+        return "".join(out)
+    except Exception:
+        return None
+
+
 def lang_of():
     return session.get("lang", "zh") if session.get("lang") in UI else "zh"
 
@@ -314,6 +349,10 @@ def work(rid):
     if not r:
         abort(404)
     r["views"] = r.get("views", 0) + 1
+    r["docx_html"] = ""
+    if r.get("doc") and r["doc"].lower().endswith(".docx"):
+        r["docx_html"] = docx_to_html(
+            os.path.join(BASE_DIR, r["doc"].lstrip("/"))) or ""
     save_results(results)
     return render_template("work.html", r=r, active="", **ctx())
 

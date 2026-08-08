@@ -280,6 +280,22 @@ a.card { text-decoration: none; color: inherit; }
   background: #fff;
 }
 .doc-box .btn.sm { padding: 6px 14px; }
+/* docx 预览（后端解析的 HTML） */
+.docx-preview {
+  background: #fff; color: #1a1a1a;
+  max-height: 72vh; overflow-y: auto;
+  padding: 28px 36px; line-height: 1.9; font-size: 14.5px;
+}
+.docx-preview p { margin: 0 0 10px; }
+.docx-preview table {
+  width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13.5px;
+}
+.docx-preview td {
+  border: 1px solid #d5d5d5; padding: 6px 10px; vertical-align: top;
+}
+.docx-preview h1, .docx-preview h2, .docx-preview h3 {
+  margin: 16px 0 8px; color: #111;
+}
 .d-badge {
   display: inline-block; padding: 4px 14px; border-radius: 980px;
   background: rgba(0, 113, 227, 0.1); color: var(--blue);

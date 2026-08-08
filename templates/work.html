@@ -38,7 +38,9 @@
       <a class="btn btn-outline sm" href="{{ r.doc }}" target="_blank" rel="noopener">{{ T.doc_open }}</a>
       <a class="btn btn-dark sm" href="{{ r.doc }}" download>{{ T.doc_download }}</a>
     </div>
-    {% if r.doc.lower().endswith('.pdf') %}
+    {% if r.docx_html %}
+    <div class="docx-preview">{{ r.docx_html | safe }}</div>
+    {% elif r.doc.lower().endswith('.pdf') %}
     <iframe class="doc-preview" src="{{ r.doc }}" loading="lazy"></iframe>
     {% endif %}
   </div>
