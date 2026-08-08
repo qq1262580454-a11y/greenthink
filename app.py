@@ -34,7 +34,8 @@ app.config["MAX_CONTENT_LENGTH"] = 60 * 1024 * 1024  # 上传上限 60MB
 # 上传白名单
 ALLOWED_IMAGES = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 ALLOWED_VIDEOS = {".mp4", ".webm", ".mov"}
-ALLOWED_ALL = ALLOWED_IMAGES | ALLOWED_VIDEOS
+ALLOWED_DOCS = {".pdf", ".doc", ".docx"}
+ALLOWED_ALL = ALLOWED_IMAGES | ALLOWED_VIDEOS | ALLOWED_DOCS
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
@@ -67,8 +68,10 @@ UI = {
         "form_link": "体验链接（选填）",
         "form_images": "作品图片（可多张，第一张作封面，支持 jpg/png/webp/gif）",
         "form_video": "作品视频（选填，建议 H.264 编码的 mp4；手机默认 HEVC 编码可能无法播放）",
+        "form_doc": "作品文档（选填，PDF/Word，放完整方案、图集或说明）",
         "video_hint": "视频无法播放？多为浏览器不支持 HEVC 编码（手机拍摄常见），可下载后播放",
         "video_download": "下载视频",
+        "doc_open": "新窗口打开", "doc_download": "下载文档",
         "form_optional": "选填",
         "submit_btn": "提交成果", "browse_btn": "先逛逛展厅",
         "submit_ok": "✅ 提交成功", "submit_ok_sub": "你的创意成果已进入审核队列，通过后会展示在展厅里。",
@@ -110,8 +113,10 @@ UI = {
         "form_link": "Experience link (optional)",
         "form_images": "Work images (multiple OK, first is cover; jpg/png/webp/gif)",
         "form_video": "Work video (optional; H.264 mp4 recommended — phone HEVC may not play in browsers)",
+        "form_doc": "Work document (optional; PDF/Word — full plan, album or description)",
         "video_hint": "Video not playing? Likely HEVC (H.265) from phones — browsers may not support it. Download to watch.",
         "video_download": "Download video",
+        "doc_open": "Open", "doc_download": "Download",
         "form_optional": "Optional",
         "submit_btn": "Submit Work", "browse_btn": "Browse Gallery",
         "submit_ok": "✅ Submitted", "submit_ok_sub": "Your creation is in the review queue and will appear in the gallery once approved.",
@@ -177,6 +182,8 @@ def attach_img(results):
         r.setdefault("images", [])
         r.setdefault("video", "")
         r.setdefault("story", "")
+        r.setdefault("doc", "")
+        r.setdefault("doc_name", "")
     return results
 
 
@@ -300,6 +307,14 @@ def submit():
             vpath = save_upload(vf)
             if vpath and vpath.lower().endswith(tuple(ALLOWED_VIDEOS)):
                 video = vpath
+        doc = ""
+        doc_name = ""
+        df = request.files.get("doc")
+        if df and df.filename:
+            dpath = save_upload(df)
+            if dpath and dpath.lower().endswith(tuple(ALLOWED_DOCS)):
+                doc = dpath
+                doc_name = df.filename[:60]
 
         results = load_results()
         results.append({
@@ -317,6 +332,8 @@ def submit():
             "link": (f.get("link") or "").strip(),
             "images": images,
             "video": video,
+            "doc": doc,
+            "doc_name": doc_name,
             "status": "pending",
             "views": 0,
             "created": date.today().isoformat(),
@@ -387,6 +404,11 @@ def delete(rid):
         if target.get("video"):
             try:
                 os.remove(os.path.join(BASE_DIR, target["video"].lstrip("/")))
+            except OSError:
+                pass
+        if target.get("doc"):
+            try:
+                os.remove(os.path.join(BASE_DIR, target["doc"].lstrip("/")))
             except OSError:
                 pass
     return redirect(url_for("admin"))

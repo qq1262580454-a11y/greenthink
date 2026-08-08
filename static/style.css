@@ -261,6 +261,25 @@ a.card { text-decoration: none; color: inherit; }
 }
 .d-video-bar .v-dl:hover { text-decoration: underline; }
 .d-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+
+/* 作品文档 */
+.doc-box {
+  background: var(--card); border-radius: 14px;
+  box-shadow: var(--shadow); margin-bottom: 40px; overflow: hidden;
+}
+.doc-head {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px; flex-wrap: wrap;
+  border-bottom: 1px solid rgba(26, 26, 28, 0.07);
+}
+.doc-icon { font-size: 22px; }
+.doc-info { flex: 1; min-width: 160px; }
+.doc-info b { font-size: 14.5px; display: block; margin-bottom: 2px; }
+.doc-preview {
+  display: block; width: 100%; height: 72vh; border: none;
+  background: #fff;
+}
+.doc-box .btn.sm { padding: 6px 14px; }
 .d-badge {
   display: inline-block; padding: 4px 14px; border-radius: 980px;
   background: rgba(0, 113, 227, 0.1); color: var(--blue);

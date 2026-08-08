@@ -27,6 +27,23 @@
   </div>
   {% endif %}
 
+  {% if r.doc %}
+  <div class="doc-box">
+    <div class="doc-head">
+      <span class="doc-icon">📄</span>
+      <div class="doc-info">
+        <b>{{ r.doc_name or 'Work Document' }}</b>
+        <span class="hint">{{ r.doc.rsplit('.', 1)[-1].upper() }}</span>
+      </div>
+      <a class="btn btn-outline sm" href="{{ r.doc }}" target="_blank" rel="noopener">{{ T.doc_open }}</a>
+      <a class="btn btn-dark sm" href="{{ r.doc }}" download>{{ T.doc_download }}</a>
+    </div>
+    {% if r.doc.lower().endswith('.pdf') %}
+    <iframe class="doc-preview" src="{{ r.doc }}" loading="lazy"></iframe>
+    {% endif %}
+  </div>
+  {% endif %}
+
   <div class="d-head">
     <span class="d-badge">{{ r.tag }}</span>
     <span class="d-views">👁 {{ r.views }} {{ T.work_views }}</span>
