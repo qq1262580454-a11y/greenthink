@@ -265,6 +265,7 @@ def work(rid):
     if not r:
         abort(404)
     r["views"] = r.get("views", 0) + 1
+    r.pop("has_img", None)  # 临时计算字段，不持久化
     save_results(results)
     return render_template("work.html", r=r, active="", **ctx())
 
