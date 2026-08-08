@@ -49,7 +49,7 @@
 - **技术栈**：Flask + 原生 HTML/CSS/JS，零构建，双击能跑
 - **本地运行**：`pip install flask && python app.py` → http://127.0.0.1:5010
 - **管理员密码**：环境变量 `GREENTHINK_ADMIN_PASSWORD`（Windows：`setx GREENTHINK_ADMIN_PASSWORD "你的密码"`；`启动工具.bat` 会自动从注册表读取）
-- **数据**：`data/results.json`，一份公开的 JSON，谁都能验证
+- **数据**：`data/results.json` 是运行时数据（作品提交产生，**不入 git 仓库**）；首次运行自动从 `data/results.example.json` 初始化
 - **配图**：`static/img/works/<成果id>.jpg`（4:3，有图自动显示）
 - **参与开发**：[CONTRIBUTING.md](CONTRIBUTING.md) · 认领 `good first issue`
 - **协议**：[MIT License](LICENSE)

@@ -19,6 +19,7 @@ from werkzeug.utils import secure_filename
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE = os.path.join(BASE_DIR, "data", "results.json")
+EXAMPLE_FILE = os.path.join(BASE_DIR, "data", "results.example.json")
 IMG_DIR = os.path.join(BASE_DIR, "static", "img", "works")
 UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
 IMG_EXTS = (".jpg", ".jpeg", ".png", ".webp")
@@ -154,6 +155,11 @@ TAG_VALUES = [t[0] for t in TAGS]
 # ═══════════ 工具函数 ═══════════
 
 def load_results():
+    # results.json 是运行时数据（不入 git）；不存在时从示例数据初始化
+    if not os.path.exists(DATA_FILE) and os.path.exists(EXAMPLE_FILE):
+        with open(EXAMPLE_FILE, "r", encoding="utf-8") as src, \
+                open(DATA_FILE, "w", encoding="utf-8") as dst:
+            dst.write(src.read())
     with open(DATA_FILE, "r", encoding="utf-8") as f:
         return json.load(f)["results"]
 
