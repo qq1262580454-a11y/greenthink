@@ -3,21 +3,21 @@ chcp 936 >nul
 title Greenthink
 cd /d %~dp0
 
-rem ä»æ³¨å†Œè¡¨è¯»å–ç®¡ç†å‘˜å¯†ç ï¼ˆä¸å…¥ä»£ç ã€ä¸å…¥ gitï¼‰ï¼Œæœªè®¾ç½®åˆ™ç”¨é»˜è®¤
+rem ´Ó×¢²á±í¶ÁÈ¡¹ÜÀíÔ±ÃÜÂë£¨²»Èë´úÂë¡¢²»Èë git£©
 for /f "tokens=2*" %%a in ('reg query "HKCU\Environment" /v GREENTHINK_ADMIN_PASSWORD 2^>nul') do set GREENTHINK_ADMIN_PASSWORD=%%b
 
-rem æ£€æŸ¥æœåŠ¡æ˜¯å¦å·²åœ¨è¿è¡Œ
+rem ¼ì²é·şÎñÊÇ·ñÒÑÔÚÔËĞĞ
 netstat -ano | findstr ":5010" | findstr "LISTENING" >nul 2>&1
 if %errorlevel%==0 (
-    echo æœåŠ¡å·²åœ¨è¿è¡Œ: http://127.0.0.1:5010
+    echo ·şÎñÒÑÔÚÔËĞĞ: http://127.0.0.1:5010
     start http://127.0.0.1:5010
     pause
     exit /b 0
 )
 
-echo æ­£åœ¨å¯åŠ¨ Greenthink...
+echo ÕıÔÚÆô¶¯ Greenthink...
 start "" pythonw app.py 2>>error.log
-timeout /t 2 >nul
-echo æœåŠ¡å·²å¯åŠ¨: http://127.0.0.1:5010
+ping -n 3 127.0.0.1 >nul
+echo ·şÎñÒÑÆô¶¯: http://127.0.0.1:5010
 start http://127.0.0.1:5010
 pause
