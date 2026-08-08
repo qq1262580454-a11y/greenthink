@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ r.title }} · Greenthink{% endblock %}
+{% block content %}
+
+<section class="detail page">
+  <div class="crumb"><a href="/works">← 返回展厅</a></div>
+
+  {% if r.has_img %}
+  <div class="d-hero">
+    <img src="{{ url_for('static', filename='img/works/' ~ r.id ~ '.jpg') }}" alt="{{ r.title }}">
+  </div>
+  {% endif %}
+
+  <div class="d-head">
+    <span class="d-badge">{{ r.tag }}</span>
+    <span class="d-views">👁 {{ r.views }} 次被看见</span>
+  </div>
+  <h1 class="d-title">{{ r.title }}</h1>
+  <div class="d-meta">
+    <span>创作者 {{ r.author }}</span>
+    <span>{{ r.industry }}</span>
+    <span>{{ r.created }}</span>
+  </div>
+  <p class="d-summary">{{ r.summary }}</p>
+
+  {% if r.link %}
+  <div class="d-actions">
+    <a class="btn btn-dark" href="{{ r.link }}" target="_blank" rel="noopener">▶ 体验这个成果</a>
+  </div>
+  {% endif %}
+
+  <div class="d-effects">
+    {% for e in r.effects %}
+    <span class="eff">{{ e }}</span>
+    {% endfor %}
+  </div>
+
+  {% if r.problem %}
+  <div class="sec">
+    <h3>遇到的问题</h3>
+    <p>{{ r.problem }}</p>
+  </div>
+  {% endif %}
+
+  {% if r.solution %}
+  <div class="sec">
+    <h3>创意的解法</h3>
+    <p>{{ r.solution }}</p>
+  </div>
+  {% endif %}
+
+  {% if r.result %}
+  <div class="sec">
+    <h3>最终结果</h3>
+    <p>{{ r.result }}</p>
+  </div>
+  {% endif %}
+
+  <div class="card empty" style="text-align:center">
+    你也做出了成果？<a href="/submit">提交你的作品</a>，让更多人看见。
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ r.title }}{% endblock %}
+{% block content %}
+
+<div class="crumb"><a href="/">← 成果墙</a></div>
+
+<div class="card detail">
+  <div class="detail-head">
+    <span class="badge">{{ r.tag }}</span>
+    <span class="views">👁 {{ r.views }}</span>
+  </div>
+  <h1 class="d-title">{{ r.title }}</h1>
+  <div class="d-meta">
+    <span>👤 {{ r.author }}</span>
+    <span>🏢 {{ r.industry }}</span>
+    <span>📅 {{ r.created }}</span>
+  </div>
+  <p class="d-summary">{{ r.summary }}</p>
+
+  {% if r.link %}
+  <div class="d-actions">
+    <a class="btn primary" href="{{ r.link }}" target="_blank" rel="noopener">▶ 试试这个成果</a>
+  </div>
+  {% endif %}
+
+  <div class="effects">
+    {% for e in r.effects %}
+    <span class="eff">{{ e }}</span>
+    {% endfor %}
+  </div>
+
+  {% if r.problem %}
+  <div class="sec">
+    <h3>① 遇到了什么问题</h3>
+    <p>{{ r.problem }}</p>
+  </div>
+  {% endif %}
+
+  {% if r.solution %}
+  <div class="sec">
+    <h3>② 怎么用 AI 解决的</h3>
+    <p>{{ r.solution }}</p>
+  </div>
+  {% endif %}
+
+  {% if r.result %}
+  <div class="sec">
+    <h3>③ 实际效果</h3>
+    <p>{{ r.result }}</p>
+  </div>
+  {% endif %}
+</div>
+
+<div class="card empty" style="text-align:center">
+  你也做出了成果？<a href="/submit">晒出来</a>，让更多人看见。
+</div>
+
+{% endblock %}

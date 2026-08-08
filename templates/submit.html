@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}提交作品 · Greenthink{% endblock %}
+{% block content %}
+
+<section class="submit page">
+  <h2 class="sec-title">提交你的创意成果</h2>
+  <p class="sec-sub">不要求会写代码。只要你用AI做出了<b>完整、成熟、最终的创意成果</b>——一个作品、一套方案、一个工具都行。提交后经管理员审核，就会展示在展厅里。</p>
+
+  {% if err %}<div class="err">{{ err }}</div>{% endif %}
+
+  <form method="post" class="form">
+    <label>成果名称 <span class="req">*</span>
+      <input type="text" name="title" required placeholder="如：山海方言录" maxlength="60">
+    </label>
+    <label>创作者署名 <span class="req">*</span>
+      <input type="text" name="author" required placeholder="你的名字或称呼" maxlength="20">
+    </label>
+    <label>所属领域
+      <input type="text" name="industry" placeholder="如：数字艺术 / 空间设计 / 网络运维">
+    </label>
+    <label>分类
+      <select name="tag">
+        {% for t in tags %}{% if t != "全部" %}<option value="{{ t }}">{{ t }}</option>{% endif %}{% endfor %}
+      </select>
+    </label>
+    <label>一句话简介 <span class="req">*</span>
+      <input type="text" name="summary" required placeholder="用一句话说清楚这个成果是什么" maxlength="120">
+    </label>
+    <label>它解决了什么问题
+      <textarea name="problem" rows="3" placeholder="背景是什么？原来哪里不满足？"></textarea>
+    </label>
+    <label>创意是怎么落地的
+      <textarea name="solution" rows="3" placeholder="你让AI做了什么？你的做法是什么？"></textarea>
+    </label>
+    <label>最终结果
+      <textarea name="result" rows="3" placeholder="最终成品是什么？效果如何？谁在用？"></textarea>
+    </label>
+    <label>效果数据（每行一条）
+      <textarea name="effects" rows="3" placeholder="如：&#10;12种方言视觉化&#10;完整可巡展图集"></textarea>
+    </label>
+    <label>体验链接（选填）
+      <input type="text" name="link" placeholder="http://... 作品展示或体验地址">
+    </label>
+    <div class="d-actions">
+      <button class="btn btn-dark" type="submit">提交成果</button>
+      <a class="btn btn-outline" href="/works">先逛逛展厅</a>
+    </div>
+  </form>
+</section>
+
+{% endblock %}

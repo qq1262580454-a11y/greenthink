@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# 运行日志
+*.log
+error.log
+
+# 系统
+Thumbs.db
+.DS_Store

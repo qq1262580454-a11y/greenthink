@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Greenthink · 你的创意，应该被看见{% endblock %}
+{% block content %}
+
+<!-- ═══ 首屏 ═══ -->
+<section class="hero">
+  <h1>你的创意，应该被看见</h1>
+  <p class="intro">世界上从不缺少好想法，只缺少让它们被看见的地方。</p>
+  <div class="hero-actions">
+    <a class="btn btn-dark" href="/works">浏览展厅</a>
+    <a class="btn btn-outline" href="/submit">提交作品</a>
+  </div>
+  <p class="hero-note">© 2026 Greenthink</p>
+</section>
+
+<!-- ═══ 精选创意成果 ═══ -->
+<section class="works">
+  <h2 class="sec-title">精选创意成果</h2>
+  <div class="w-grid">
+    {% for r in featured %}
+    <a class="card reveal" href="/work/{{ r.id }}">
+      <div class="card-art{% if not r.has_img %} art-{{ loop.index }}{% endif %}">
+        {% if r.has_img %}
+        <img src="{{ url_for('static', filename='img/works/' ~ r.id ~ '.jpg') }}" alt="{{ r.title }}">
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <h3>{{ r.title }}</h3>
+        <p>{{ r.summary }}</p>
+        <span class="author">{{ r.author }}</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  <div class="more">
+    <a class="btn btn-outline" href="/works">查看全部成果</a>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}展厅 · Greenthink{% endblock %}
+{% block content %}
+
+<!-- ═══ 成果展厅 ═══ -->
+<section class="works page">
+  <h2 class="sec-title">成果展厅</h2>
+  <p class="sec-sub">共 {{ total }} 个成果 · 我们不展示创作过程，只呈现最终创意结果</p>
+
+  <div class="tagbar">
+    {% for t in tags %}
+      <a class="tag {{ 'active' if t == cur else '' }}" href="/works?tag={{ t }}">{{ t }}</a>
+    {% endfor %}
+  </div>
+
+  {% if results %}
+  <div class="w-grid">
+    {% for r in results %}
+    <a class="card reveal" href="/work/{{ r.id }}">
+      <div class="card-art{% if not r.has_img %} art-{{ loop.index }}{% endif %}">
+        {% if r.has_img %}
+        <img src="{{ url_for('static', filename='img/works/' ~ r.id ~ '.jpg') }}" alt="{{ r.title }}">
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <h3>{{ r.title }}</h3>
+        <p>{{ r.summary }}</p>
+        <span class="author">{{ r.author }} · {{ r.industry }}</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card empty">该分类下暂无成果，<a href="/submit">来提交第一个</a></div>
+  {% endif %}
+</section>
+
+{% endblock %}

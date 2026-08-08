@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Greenthink · 你的创意，应该被看见{% endblock %}</title>
+<meta name="description" content="让每一个藏在脑海里的创意，终于有地方落地、被看见、被记住。">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- ═══ 顶部导航 ═══ -->
+<nav class="nav">
+  <a class="nav-logo" href="/">
+    <svg viewBox="0 0 24 24" class="nav-logo-icon" fill="none" aria-hidden="true">
+      <path d="M4 20C4 9.5 11.5 5 20 4c-.6 8.5-6.5 13.8-16 16z" stroke="#689e84" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M4 20C8.5 13.5 12.8 9 19 5.5" stroke="#689e84" stroke-width="1.1" stroke-linecap="round"/>
+    </svg>
+    Greenthink
+  </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="/works" class="{{ 'active' if active == 'works' else '' }}">展厅</a>
+      <a href="/submit" class="{{ 'active' if active == 'submit' else '' }}">提交作品</a>
+      <a href="#">创作者</a>
+      <a href="#">关于我们</a>
+    </div>
+    <a class="btn-nav" href="/submit">提交创意</a>
+  </div>
+</nav>
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<!-- ═══ 页脚 ═══ -->
+<footer class="footer">
+  <h2>让每一个藏在脑海里的创意，<br>终于有地方落地、被看见、被记住。</h2>
+  <p class="foot-tagline">工具交给AI迭代，想象力由人类定义。</p>
+  <p class="foot-note">© 2026 Greenthink</p>
+</footer>
+
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
