@@ -311,6 +311,14 @@ a.card { text-decoration: none; color: inherit; }
   display: flex; flex-wrap: wrap; gap: 22px;
   color: var(--ink-dim); font-size: 14px; margin-bottom: 30px;
 }
+/* 底部署名落款 */
+.d-sign {
+  margin: 44px 0 10px; padding-top: 24px;
+  border-top: 1px solid rgba(26, 26, 28, 0.08);
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+}
+.d-sign-who { font-size: 15px; font-weight: 600; color: var(--blue); }
+.d-sign-meta { font-size: 13px; color: var(--ink-faint); }
 .d-summary {
   font-size: 17px; color: var(--ink);
   line-height: 1.9; background: var(--card);

@@ -5,54 +5,12 @@
 <section class="detail page">
   <div class="crumb"><a href="/works">{{ T.work_back }}</a></div>
 
-  {% if r.images %}
-  <div class="d-gallery">
-    {% for img in r.images %}
-    <div class="d-gallery-item"><img src="{{ img }}" alt="{{ r.title }}"></div>
-    {% endfor %}
-  </div>
-  {% elif r.has_img %}
-  <div class="d-hero">
-    <img src="{{ url_for('static', filename='img/works/' ~ r.id ~ '.jpg') }}" alt="{{ r.title }}">
-  </div>
-  {% endif %}
-
-  {% if r.video %}
-  <div class="d-video">
-    <video src="{{ r.video }}" controls preload="metadata"></video>
-    <div class="d-video-bar">
-      <span class="hint">{{ T.video_hint }}</span>
-      <a class="v-dl" href="{{ r.video }}" download>{{ T.video_download }}</a>
-    </div>
-  </div>
-  {% endif %}
-
-  {% if r.doc %}
-  <div class="doc-box">
-    <div class="doc-head">
-      <span class="doc-icon">📄</span>
-      <div class="doc-info">
-        <b>{{ r.doc_name or 'Work Document' }}</b>
-        <span class="hint">{{ r.doc.rsplit('.', 1)[-1].upper() }}</span>
-      </div>
-      <a class="btn btn-outline sm" href="{{ r.doc }}" target="_blank" rel="noopener">{{ T.doc_open }}</a>
-      <a class="btn btn-dark sm" href="{{ r.doc }}" download>{{ T.doc_download }}</a>
-    </div>
-    {% if r.docx_html %}
-    <div class="docx-preview">{{ r.docx_html | safe }}</div>
-    {% elif r.doc.lower().endswith('.pdf') %}
-    <iframe class="doc-preview" src="{{ r.doc }}" loading="lazy"></iframe>
-    {% endif %}
-  </div>
-  {% endif %}
-
   <div class="d-head">
     <span class="d-badge">{{ r.tag }}</span>
     <span class="d-views">👁 {{ r.views }} {{ T.work_views }}</span>
   </div>
   <h1 class="d-title">{{ r.title }}</h1>
   <div class="d-meta">
-    <span>{{ T.work_creator }} {{ r.author }}</span>
     <span>{{ r.industry }}</span>
     <span>{{ r.created }}</span>
   </div>
@@ -70,6 +28,18 @@
     {% endfor %}
   </div>
 
+  <!-- 主视觉：第一张图优先（先看作品） -->
+  {% if r.images %}
+  <div class="d-hero">
+    <img src="{{ r.images[0] }}" alt="{{ r.title }}">
+  </div>
+  {% elif r.has_img %}
+  <div class="d-hero">
+    <img src="{{ url_for('static', filename='img/works/' ~ r.id ~ '.jpg') }}" alt="{{ r.title }}">
+  </div>
+  {% endif %}
+
+  <!-- 作品故事 -->
   {% if r.story %}
   <div class="sec">
     <h3>{{ T.work_story }}</h3>
@@ -95,6 +65,52 @@
     <p>{{ r.result }}</p>
   </div>
   {% endif %}
+
+  <!-- 更多图片 -->
+  {% if r.images|length > 1 %}
+  <div class="d-gallery">
+    {% for img in r.images[1:] %}
+    <div class="d-gallery-item"><img src="{{ img }}" alt="{{ r.title }}" loading="lazy"></div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- 视频 -->
+  {% if r.video %}
+  <div class="d-video">
+    <video src="{{ r.video }}" controls preload="metadata"></video>
+    <div class="d-video-bar">
+      <span class="hint">{{ T.video_hint }}</span>
+      <a class="v-dl" href="{{ r.video }}" download>{{ T.video_download }}</a>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- 文档 -->
+  {% if r.doc %}
+  <div class="doc-box">
+    <div class="doc-head">
+      <span class="doc-icon">📄</span>
+      <div class="doc-info">
+        <b>{{ r.doc_name or 'Work Document' }}</b>
+        <span class="hint">{{ r.doc.rsplit('.', 1)[-1].upper() }}</span>
+      </div>
+      <a class="btn btn-outline sm" href="{{ r.doc }}" target="_blank" rel="noopener">{{ T.doc_open }}</a>
+      <a class="btn btn-dark sm" href="{{ r.doc }}" download>{{ T.doc_download }}</a>
+    </div>
+    {% if r.docx_html %}
+    <div class="docx-preview">{{ r.docx_html | safe }}</div>
+    {% elif r.doc.lower().endswith('.pdf') %}
+    <iframe class="doc-preview" src="{{ r.doc }}" loading="lazy"></iframe>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- 底部署名（落款） -->
+  <div class="d-sign">
+    <span class="d-sign-who">{{ T.work_creator }} {{ r.author }}</span>
+    <span class="d-sign-meta">{{ r.industry }} · {{ r.created }}</span>
+  </div>
 
   <div class="card empty" style="text-align:center">
     <a href="/submit">{{ T.work_cta }}</a>
