@@ -25,7 +25,7 @@ python app.py    # http://127.0.0.1:5010
 
 ### 代码约定
 - Flask + 原生 HTML/CSS/JS，**不要引入前端框架**（保持零构建、双击能跑）
-- 风格保持浅灰白苹果风（`static/style.css` 顶部有配色注释）
+- 风格保持全站统一（`static/style.css` 顶部有配色注释）
 - 数据存 `data/results.json`，改结构时注意向后兼容
 - 图片一律放 `static/img/works/`，命名用成果 id
 

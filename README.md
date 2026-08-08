@@ -42,7 +42,7 @@ AI成果展/
 ├── data/results.json      # 成果数据（JSON，改完刷新即生效）
 ├── templates/             # 页面模板
 ├── static/
-│   ├── style.css          # 全站样式（浅灰白苹果风）
+│   ├── style.css          # 全站样式
 │   ├── main.js            # 滚动淡入
 │   └── img/works/         # 作品封面图（1.jpg / 2.jpg …对应成果 id）
 └── 启动工具.bat / 停止工具.bat
